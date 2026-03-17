@@ -1,4 +1,5 @@
 const catalog = document.getElementById("catalog");
+const cartBox = document.getElementById("cart-box");
 
 let plants = [
   {
@@ -24,15 +25,79 @@ let plants = [
   }
 ];
 
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
 function renderCatalog() {
   catalog.innerHTML = plants.map(p => `
     <div class="card">
       <img src="${p.image}">
       <h3>${p.name}</h3>
       <p>${p.category}</p>
-      <b>${p.price} грн</b>
+      <b>${p.price} грн</b><br>
+      <button onclick="addToCart(${p.id})">Купити</button>
     </div>
   `).join("");
 }
 
+function addToCart(id) {
+  let item = plants.find(p => p.id === id);
+  let existing = cart.find(p => p.id === id);
+
+  if (existing) {
+    existing.qty++;
+  } else {
+    cart.push({ ...item, qty: 1 });
+  }
+
+  saveCart();
+}
+
+function renderCart() {
+  if (cart.length === 0) {
+    cartBox.innerHTML = "Кошик пустий";
+    return;
+  }
+
+  let total = 0;
+
+  cartBox.innerHTML = cart.map((item, index) => {
+    total += item.price * item.qty;
+
+    return `
+      <div style="border-bottom:1px solid #ccc; padding:5px;">
+        <b>${item.name}</b><br>
+        ${item.price} грн × ${item.qty}<br>
+
+        <button onclick="changeQty(${index}, 1)">+</button>
+        <button onclick="changeQty(${index}, -1)">-</button>
+        <button onclick="removeItem(${index})">❌</button>
+      </div>
+    `;
+  }).join("");
+
+  cartBox.innerHTML += <h3>Сума: ${total} грн</h3>;
+}
+
+function changeQty(index, delta) {
+  cart[index].qty += delta;
+
+  if (cart[index].qty <= 0) {
+    cart.splice(index, 1);
+  }
+
+  saveCart();
+}
+
+function removeItem(index) {
+  cart.splice(index, 1);
+  saveCart();
+}
+
+function saveCart() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
+}
+
+/* запуск */
 renderCatalog();
+renderCart();
