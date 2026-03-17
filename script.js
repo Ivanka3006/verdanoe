@@ -1,6 +1,5 @@
 const catalog = document.getElementById("catalog");
 
-// беремо дані з localStorage
 const plant = JSON.parse(localStorage.getItem("plant"));
 
 if (plant) {
@@ -8,8 +7,15 @@ if (plant) {
     <div>
       <h3>${plant.name}</h3>
       <p>${plant.desc}</p>
+      <b>${plant.price} грн</b><br><br>
+      <button onclick="addToCart()">Купити</button>
     </div>
   `;
 } else {
   catalog.innerHTML = "<p>Немає рослин</p>";
+}
+
+function addToCart() {
+  localStorage.setItem("cart", JSON.stringify(plant));
+  alert("Додано в кошик!");
 }
