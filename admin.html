@@ -7,14 +7,18 @@
 
 <body>
 
-<h2>Додати товар</h2>
+<h2>➕ Додати товар</h2>
 
 <input id="name" placeholder="Назва"><br><br>
 <input id="price" placeholder="Ціна"><br><br>
 <input id="category" placeholder="Категорія"><br><br>
+<input id="desc" placeholder="Опис"><br><br>
 <input id="image" placeholder="URL картинки"><br><br>
 
 <button onclick="addProduct()">Додати</button>
+
+<h2>📦 Товари</h2>
+<div id="list"></div>
 
 <script>
 function addProduct() {
@@ -25,15 +29,37 @@ function addProduct() {
     name: document.getElementById("name").value,
     price: Number(document.getElementById("price").value),
     category: document.getElementById("category").value,
+    desc: document.getElementById("desc").value,
     image: document.getElementById("image").value
   };
 
   plants.push(newProduct);
-
   localStorage.setItem("plants", JSON.stringify(plants));
 
-  alert("Додано!");
+  renderList();
 }
+
+function renderList() {
+  let plants = JSON.parse(localStorage.getItem("plants")) || [];
+
+  document.getElementById("list").innerHTML = plants.map((p, i) => `
+    <div style="border:1px solid #ccc; padding:5px; margin:5px;">
+      ${p.name} - ${p.price} грн
+      <button onclick="deleteItem(${i})">❌</button>
+    </div>
+  `).join("");
+}
+
+function deleteItem(index) {
+  let plants = JSON.parse(localStorage.getItem("plants")) || [];
+
+  plants.splice(index, 1);
+  localStorage.setItem("plants", JSON.stringify(plants));
+
+  renderList();
+}
+
+renderList();
 </script>
 
 </body>
