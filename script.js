@@ -1,19 +1,32 @@
 const catalog = document.getElementById("catalog");
 
-// масив товарів
-const plants = JSON.parse(localStorage.getItem("plants")) || [];
+let plants = JSON.parse(localStorage.getItem("plants")) || [];
 
-if (plants.length > 0) {
-  catalog.innerHTML = plants.map((plant, index) => `
+function render(data) {
+  if (data.length === 0) {
+    catalog.innerHTML = "Немає товарів";
+    return;
+  }
+
+  catalog.innerHTML = data.map((plant, index) => `
     <div>
-      <h3>${plant.name}</h3>
-      <p>${plant.desc}</p>
+      <h3 onclick="openProduct(${index})">${plant.name}</h3>
+      <p>${plant.category}</p>
       <b>${plant.price} грн</b><br>
       <button onclick="addToCart(${index})">Купити</button>
     </div>
   `).join("");
-} else {
-  catalog.innerHTML = "Немає товарів";
+}
+
+render(plants);
+
+function filter(cat) {
+  if (cat === "всі") {
+    render(plants);
+  } else {
+    const filtered = plants.filter(p => p.category === cat);
+    render(filtered);
+  }
 }
 
 function addToCart(index) {
@@ -21,4 +34,9 @@ function addToCart(index) {
   cart.push(plants[index]);
   localStorage.setItem("cart", JSON.stringify(cart));
   alert("Додано в кошик");
+}
+
+function openProduct(index) {
+  localStorage.setItem("currentProduct", index);
+  window.location.href = "product.html";
 }
