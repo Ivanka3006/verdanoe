@@ -1,3 +1,21 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Адмінка</title>
+</head>
+
+<body>
+
+<h2>Додати рослину</h2>
+
+<input id="name" placeholder="Назва">
+<input id="desc" placeholder="Опис">
+<input id="price" placeholder="Ціна">
+<input id="category" placeholder="Категорія">
+
+<button onclick="addPlant()">Додати</button>
+
 <script>
 function addPlant() {
   const name = document.getElementById("name").value;
@@ -18,9 +36,12 @@ function addPlant() {
 
   alert("Додано!");
 
-  // очистка полів
   document.getElementById("name").value = "";
   document.getElementById("desc").value = "";
   document.getElementById("price").value = "";
+  document.getElementById("category").value = "";
 }
 </script>
+
+</body>
+</html>
