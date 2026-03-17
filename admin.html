@@ -11,13 +11,14 @@
 <input id="name" placeholder="Назва">
 <input id="desc" placeholder="Опис">
 <button onclick="addPlant()">Додати</button>
-
+<input id="price" placeholder="Ціна">
 <script>
 function addPlant() {
   const name = document.getElementById("name").value;
   const desc = document.getElementById("desc").value;
+  const price = document.getElementById("price").value;
 
-  localStorage.setItem("plant", JSON.stringify({ name, desc }));
+  localStorage.setItem("plant", JSON.stringify({ name, desc, price }));
 
   alert("Збережено!");
 }
