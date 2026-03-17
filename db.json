@@ -1,0 +1,31 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Ялина звичайна",
+      "category": "хвойні",
+      "price": 250,
+      "quantity": 10,
+      "description": "Вічнозелена хвойна рослина, ідеальна для саду",
+      "image": ""
+    },
+    {
+      "id": 2,
+      "name": "Яблуня",
+      "category": "плодові",
+      "price": 300,
+      "quantity": 5,
+      "description": "Плодовий саджанець яблуні",
+      "image": ""
+    },
+    {
+      "id": 3,
+      "name": "Гортензія",
+      "category": "квітучі кущі",
+      "price": 200,
+      "quantity": 7,
+      "description": "Кущ з великими квітами",
+      "image": ""
+    }
+  ]
+}
