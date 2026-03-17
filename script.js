@@ -1,5 +1,6 @@
 const catalog = document.getElementById("catalog");
 
+// беремо товари з localStorage
 let plants = JSON.parse(localStorage.getItem("plants")) || [];
 
 function render(data) {
@@ -10,7 +11,7 @@ function render(data) {
 
   catalog.innerHTML = data.map((plant, index) => `
     <div>
-      <h3 onclick="openProduct(${index})">${plant.name}</h3>
+      <h3>${plant.name}</h3>
       <p>${plant.category}</p>
       <b>${plant.price} грн</b><br>
       <button onclick="addToCart(${index})">Купити</button>
@@ -18,16 +19,7 @@ function render(data) {
   `).join("");
 }
 
-render(plants);
-
-function filter(cat) {
-  if (cat === "всі") {
-    render(plants);
-  } else {
-    const filtered = plants.filter(p => p.category === cat);
-    render(filtered);
-  }
-}
+// додаємо в кошик
 function addToCart(index) {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -38,16 +30,27 @@ function addToCart(index) {
   if (existing) {
     existing.qty = (existing.qty || 1) + 1;
   } else {
-    item.qty = 1;
-    cart.push(item);
+    cart.push({
+      name: item.name,
+      price: item.price,
+      qty: 1
+    });
   }
 
   localStorage.setItem("cart", JSON.stringify(cart));
+
   alert("Додано в кошик");
 }
 
-
-function openProduct(index) {
-  localStorage.setItem("currentProduct", index);
-  window.location.href = "product.html";
+// фільтр
+function filter(cat) {
+  if (cat === "всі") {
+    render(plants);
+  } else {
+    const filtered = plants.filter(p => p.category === cat);
+    render(filtered);
+  }
 }
+
+// запуск
+render(plants);
