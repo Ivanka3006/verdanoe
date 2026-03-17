@@ -1,13 +1,10 @@
 const catalog = document.getElementById("catalog");
 
-catalog.innerHTML = `
-  <div>
-    <h3>🌿 Монстера</h3>
-    <p>Красива кімнатна рослина</p>
-  </div>
+const plant = JSON.parse(localStorage.getItem("plant"));
 
-  <div>
-    <h3>🌵 Кактус</h3>
-    <p>Невибаглива рослина</p>
-  </div>
-`;
+if (plant) {
+  catalog.innerHTML = `
+    <h3>${plant.name}</h3>
+    <p>${plant.desc}</p>
+  `;
+}
