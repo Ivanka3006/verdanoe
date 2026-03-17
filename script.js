@@ -1,17 +1,6 @@
 const catalog = document.getElementById("catalog");
 
-let plants = [
-  {
-    name: "Туя Смарагд",
-    category: "туї",
-    price: 250
-  },
-  {
-    name: "Троянда",
-    category: "квіти",
-    price: 150
-  }
-];
+let plants = JSON.parse(localStorage.getItem("plants")) || [];
 
 function render(data) {
   if (data.length === 0) {
