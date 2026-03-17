@@ -45,3 +45,28 @@ function addPlant() {
 
 </body>
 </html>
+
+<script>
+function addProduct() {
+  let name = document.getElementById("name").value;
+  let price = document.getElementById("price").value;
+  let category = document.getElementById("category").value;
+  let image = document.getElementById("image").value;
+
+  let plants = JSON.parse(localStorage.getItem("plants")) || [];
+
+  let newProduct = {
+    id: Date.now(),
+    name,
+    price: Number(price),
+    category,
+    image
+  };
+
+  plants.push(newProduct);
+
+  localStorage.setItem("plants", JSON.stringify(plants));
+
+  alert("Товар додано!");
+}
+</script>
