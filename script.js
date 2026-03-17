@@ -34,14 +34,15 @@ function renderCatalog() {
     ? plants
     : plants.filter(p => p.category === currentCategory);
 
-  catalog.innerHTML = filtered.map(p => `
-    <div class="card">
-      <h3>${p.name}</h3>
-      <p>${p.category}</p>
-      <b>${p.price} грн</b><br>
-      <button onclick="addToCart(${p.id})">Купити</button>
-    </div>
-  `).join("");
+ catalog.innerHTML = filtered.map(p => `
+  <div class="card">
+    <img src="${p.image}" style="width:100%; height:150px; object-fit:cover;">
+    <h3>${p.name}</h3>
+    <p>${p.category}</p>
+    <b>${p.price} грн</b><br>
+    <button onclick="addToCart(${p.id})">Купити</button>
+  </div>
+`).join("");
 }
 
 function setCategory(cat) {
