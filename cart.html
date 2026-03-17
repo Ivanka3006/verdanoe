@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>Кошик</title>
+</head>
+<body>
+
+<h2>Кошик</h2>
+<div id="cart"></div>
+
+<script>
+const cart = JSON.parse(localStorage.getItem("cart"));
+const div = document.getElementById("cart");
+
+if (cart) {
+  div.innerHTML = `
+    <h3>${cart.name}</h3>
+    <p>${cart.desc}</p>
+    <b>${cart.price} грн</b>
+  `;
+} else {
+  div.innerHTML = "Кошик пустий";
+}
+</script>
+
+</body>
+</html>
