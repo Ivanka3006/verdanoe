@@ -1,6 +1,7 @@
 const catalog = document.getElementById("catalog");
 const cartBox = document.getElementById("cart-box");
 
+/* ТОВАРИ */
 let plants = [
   {
     id: 1,
@@ -25,8 +26,10 @@ let plants = [
   }
 ];
 
+/* КОШИК */
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+/* КАТАЛОГ */
 function renderCatalog() {
   catalog.innerHTML = plants.map(p => `
     <div class="card">
@@ -39,6 +42,7 @@ function renderCatalog() {
   `).join("");
 }
 
+/* ДОДАТИ В КОШИК */
 function addToCart(id) {
   let item = plants.find(p => p.id === id);
   let existing = cart.find(p => p.id === id);
@@ -52,7 +56,10 @@ function addToCart(id) {
   saveCart();
 }
 
+/* ВІДОБРАЖЕННЯ КОШИКА */
 function renderCart() {
+  if (!cartBox) return;
+
   if (cart.length === 0) {
     cartBox.innerHTML = "Кошик пустий";
     return;
@@ -78,6 +85,7 @@ function renderCart() {
   cartBox.innerHTML += <h3>Сума: ${total} грн</h3>;
 }
 
+/* ЗМІНА КІЛЬКОСТІ */
 function changeQty(index, delta) {
   cart[index].qty += delta;
 
@@ -88,16 +96,18 @@ function changeQty(index, delta) {
   saveCart();
 }
 
+/* ВИДАЛЕННЯ */
 function removeItem(index) {
   cart.splice(index, 1);
   saveCart();
 }
 
+/* ЗБЕРЕЖЕННЯ */
 function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
   renderCart();
 }
 
-/* запуск */
+/* ЗАПУСК */
 renderCatalog();
 renderCart();
