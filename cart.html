@@ -23,19 +23,16 @@ function renderCart() {
   div.innerHTML = cart.map((item, index) => {
     total += Number(item.price);
 
-    return `
-      <div>
-        <h3>${item.name}</h3>
-        <b>${item.price} грн</b><br>
-        <button onclick="removeItem(${index})">❌ Видалити</button>
-      </div>
-      <hr>
-    `;
-  }).join("");
+    total += Number(item.price) * (item.qty || 1);
 
-  totalDiv.innerHTML = "Разом: " + total + " грн";
-}
-
+return `
+  <div>
+    <h3>${item.name}</h3>
+    <p>Кількість: ${item.qty || 1}</p>
+    <b>${item.price} грн</b><br>
+    <button onclick="removeItem(${index})">❌ Видалити</button>
+  </div>
+`;
 function removeItem(index) {
   cart.splice(index, 1);
   localStorage.setItem("cart", JSON.stringify(cart));
