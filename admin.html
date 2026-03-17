@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Адмін панель</h2>
+
+<input id="password" placeholder="Пароль">
+<button onclick="login()">Увійти</button>
+
+<div id="admin" style="display:none;">
+  <h3>Додати товар</h3>
+
+  <input id="name" placeholder="Назва"><br>
+  <input id="category" placeholder="Категорія"><br>
+  <input id="price" placeholder="Ціна"><br>
+  <input id="quantity" placeholder="Кількість"><br>
+  <textarea id="description"></textarea><br>
+  <input type="file" id="image"><br>
+
+  <button onclick="addProduct()">Додати</button>
+</div>
+
+<script>
+let pass = "";
+
+function login() {
+  pass = document.getElementById("password").value;
+  document.getElementById("admin").style.display = "block";
+}
+
+async function addProduct() {
+  const form = new FormData();
+
+  form.append("name", name.value);
+  form.append("category", category.value);
+  form.append("price", price.value);
+  form.append("quantity", quantity.value);
+  form.append("description", description.value);
+  form.append("image", image.files[0]);
+
+  await fetch("/api/products", {
+    method: "POST",
+    headers: { password: pass },
+    body: form
+  });
+
+  alert("Додано!");
+}
+</script>
+
+</body>
+</html>
