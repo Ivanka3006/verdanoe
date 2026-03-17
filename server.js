@@ -1,17 +1,18 @@
-const plants = [
-  { name: "Троянда", price: 100, category: "Квіти" },
-  { name: "Кактус", price: 50, category: "Сукуленти" }
-];
+const express = require("express");
+const path = require("path");
 
-function render() {
-  const catalog = document.getElementById("catalog");
-  catalog.innerHTML = "";
+const app = express();
 
-  plants.forEach(p => {
-    const div = document.createElement("div");
-    div.innerHTML = <h3>${p.name}</h3><p>${p.price} грн</p>;
-    catalog.appendChild(div);
-  });
-}
+// щоб працювали css і js
+app.use(express.static(__dirname));
 
-render();
+// головна сторінка
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
+});
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log("Server running on port " + PORT);
+});
