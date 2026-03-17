@@ -2,36 +2,14 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
-  <title>Verdanoe</title>
+  <title>Каталог</title>
 
   <style>
     body {
       font-family: Arial;
-      margin: 0;
-      padding-top: 60px;
-    }
-
-    .top-bar {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background: green;
-      color: white;
-      padding: 15px;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .filters {
-      padding: 10px;
-    }
-
-    .filters button {
-      margin: 5px;
     }
 
     .catalog {
-      padding: 20px;
       display: flex;
       flex-wrap: wrap;
     }
@@ -43,38 +21,19 @@
       width: 200px;
     }
 
-    .cart-box {
-      position: fixed;
-      right: 10px;
-      top: 70px;
-      background: white;
-      border: 1px solid black;
-      padding: 10px;
-      width: 220px;
+    img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
     }
   </style>
 </head>
 
 <body>
 
-<div class="top-bar">
-  <div>🌿 Verdanoe</div>
-  <div>🛒 <span id="cart-count">0</span></div>
-</div>
+<h2>🌿 Каталог</h2>
 
-<div class="filters">
-  <button onclick="setCategory('всі')">Всі</button>
-  <button onclick="setCategory('дерева')">Дерева</button>
-  <button onclick="setCategory('квіти')">Квіти</button>
-  <button onclick="setCategory('хвойні')">Хвойні</button>
-  <button onclick="setCategory('однорічні')">Однорічні</button>
-  <button onclick="setCategory('багаторічні')">Багаторічні</button>
-  <button onclick="setCategory('сукуленти')">Сукуленти</button>
-</div>
-
-<div class="catalog" id="catalog"></div>
-
-<div class="cart-box" id="cart-box"></div>
+<div id="catalog" class="catalog"></div>
 
 <script src="script.js"></script>
 
