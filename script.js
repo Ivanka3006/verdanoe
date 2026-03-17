@@ -1,21 +1,24 @@
 const catalog = document.getElementById("catalog");
 
-const plant = JSON.parse(localStorage.getItem("plant"));
+// масив товарів
+const plants = JSON.parse(localStorage.getItem("plants")) || [];
 
-if (plant) {
-  catalog.innerHTML = `
+if (plants.length > 0) {
+  catalog.innerHTML = plants.map((plant, index) => `
     <div>
       <h3>${plant.name}</h3>
       <p>${plant.desc}</p>
-      <b>${plant.price} грн</b><br><br>
-      <button onclick="addToCart()">Купити</button>
+      <b>${plant.price} грн</b><br>
+      <button onclick="addToCart(${index})">Купити</button>
     </div>
-  `;
+  `).join("");
 } else {
-  catalog.innerHTML = "<p>Немає рослин</p>";
+  catalog.innerHTML = "Немає товарів";
 }
 
-function addToCart() {
-  localStorage.setItem("cart", JSON.stringify(plant));
-  alert("Додано в кошик!");
+function addToCart(index) {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart.push(plants[index]);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  alert("Додано в кошик");
 }
