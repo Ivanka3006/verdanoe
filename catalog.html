@@ -11,7 +11,6 @@
       padding-top: 60px;
     }
 
-    /* 🛒 верхня панель */
     .top-bar {
       position: fixed;
       top: 0;
@@ -23,14 +22,25 @@
       justify-content: space-between;
     }
 
+    .filters {
+      padding: 10px;
+    }
+
+    .filters button {
+      margin: 5px;
+    }
+
     .catalog {
       padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
     }
 
     .card {
       border: 1px solid #ccc;
       padding: 10px;
       margin: 10px;
+      width: 200px;
     }
 
     .cart-box {
@@ -40,7 +50,7 @@
       background: white;
       border: 1px solid black;
       padding: 10px;
-      width: 200px;
+      width: 220px;
     }
   </style>
 </head>
@@ -49,7 +59,17 @@
 
 <div class="top-bar">
   <div>🌿 Verdanoe</div>
-  <div>🛒 Кошик: <span id="cart-count">0</span></div>
+  <div>🛒 <span id="cart-count">0</span></div>
+</div>
+
+<div class="filters">
+  <button onclick="setCategory('всі')">Всі</button>
+  <button onclick="setCategory('дерева')">Дерева</button>
+  <button onclick="setCategory('квіти')">Квіти</button>
+  <button onclick="setCategory('хвойні')">Хвойні</button>
+  <button onclick="setCategory('однорічні')">Однорічні</button>
+  <button onclick="setCategory('багаторічні')">Багаторічні</button>
+  <button onclick="setCategory('сукуленти')">Сукуленти</button>
 </div>
 
 <div class="catalog" id="catalog"></div>
