@@ -1,0 +1,16 @@
+body {
+  font-family: Arial;
+  background: #f5f7f5;
+  padding: 20px;
+}
+
+h1 {
+  color: #2e7d32;
+}
+
+.card {
+  background: white;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 8px;
+}
