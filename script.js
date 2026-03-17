@@ -1,7 +1,7 @@
 const catalog = document.getElementById("catalog");
 const cartBox = document.getElementById("cart-box");
 
-/* ТОВАРИ З LOCALSTORAGE */
+/* ТОВАРИ */
 let plants = JSON.parse(localStorage.getItem("plants"));
 
 if (!plants || plants.length === 0) {
@@ -11,6 +11,7 @@ if (!plants || plants.length === 0) {
       name: "Туя Смарагд",
       price: 250,
       category: "хвойні",
+      desc: "Декоративна хвойна рослина",
       image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Thuja_occidentalis_Smaragd.jpg/320px-Thuja_occidentalis_Smaragd.jpg"
     }
   ];
@@ -29,10 +30,25 @@ function renderCatalog() {
       <img src="${p.image}">
       <h3>${p.name}</h3>
       <p>${p.category}</p>
+      <p>${p.desc || ""}</p>
       <b>${p.price} грн</b><br>
       <button onclick="addToCart(${p.id})">Купити</button>
     </div>
   `).join("");
+}
+
+/* ДОДАТИ В КОШИК */
+function addToCart(id) {
+  let item = plants.find(p => p.id === id);
+  let existing = cart.find(p => p.id === id);
+
+  if (existing) {
+    existing.qty++;
+  } else {
+    cart.push({ ...item, qty: 1 });
+  }
+
+  saveCart();
 }
 
 /* КОШИК */
@@ -50,9 +66,10 @@ function renderCart() {
     total += item.price * item.qty;
 
     return `
-      <div>
-        ${item.name} (${item.qty})<br>
-        ${item.price} грн
+      <div style="border-bottom:1px solid #ccc; padding:5px;">
+        <b>${item.name}</b><br>
+        ${item.price} грн × ${item.qty}<br>
+
         <button onclick="changeQty(${index}, 1)">+</button>
         <button onclick="changeQty(${index}, -1)">-</button>
         <button onclick="removeItem(${index})">❌</button>
@@ -63,21 +80,7 @@ function renderCart() {
   cartBox.innerHTML += <h3>Сума: ${total} грн</h3>;
 }
 
-/* ДОДАТИ */
-function addToCart(id) {
-  let item = plants.find(p => p.id === id);
-  let existing = cart.find(p => p.id === id);
-
-  if (existing) {
-    existing.qty++;
-  } else {
-    cart.push({ ...item, qty: 1 });
-  }
-
-  saveCart();
-}
-
-/* КІЛЬКІСТЬ */
+/* ЗМІНА КІЛЬКОСТІ */
 function changeQty(index, delta) {
   cart[index].qty += delta;
 
@@ -88,13 +91,13 @@ function changeQty(index, delta) {
   saveCart();
 }
 
-/* ВИДАЛИТИ */
+/* ВИДАЛЕННЯ */
 function removeItem(index) {
   cart.splice(index, 1);
   saveCart();
 }
 
-/* ЗБЕРЕГТИ */
+/* ЗБЕРЕЖЕННЯ */
 function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
   renderCart();
