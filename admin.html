@@ -1,13 +1,14 @@
+<input id="category" placeholder="Категорія (туї / квіти / дерева)">
 <script>
-  <input id="category" placeholder="Категорія (туї / квіти / дерева)">
 function addPlant() {
   const name = document.getElementById("name").value;
   const desc = document.getElementById("desc").value;
   const price = document.getElementById("price").value;
+  const category = document.getElementById("category").value;
 
   const plants = JSON.parse(localStorage.getItem("plants")) || [];
 
-  plants.push({ name, desc, price });
+  plants.push({ name, desc, price, category });
 
   localStorage.setItem("plants", JSON.stringify(plants));
 
