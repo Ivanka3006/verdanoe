@@ -7,6 +7,14 @@
   <style>
     body {
       font-family: Arial;
+      margin: 0;
+      display: flex;
+    }
+
+    /* Каталог */
+    .main {
+      width: 70%;
+      padding: 20px;
     }
 
     .catalog {
@@ -21,19 +29,44 @@
       width: 200px;
     }
 
-    img {
+    .card img {
       width: 100%;
       height: 150px;
       object-fit: cover;
+    }
+
+    /* Кошик справа */
+    .cart {
+      width: 30%;
+      border-left: 2px solid #ddd;
+      padding: 20px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      background: #f9f9f9;
+    }
+
+    button {
+      margin-top: 5px;
+      cursor: pointer;
     }
   </style>
 </head>
 
 <body>
 
-<h2>🌿 Каталог</h2>
+<!-- ЛІВА ЧАСТИНА -->
+<div class="main">
+  <h2>🌿 Каталог</h2>
+  <div id="catalog" class="catalog"></div>
+</div>
 
-<div id="catalog" class="catalog"></div>
+<!-- ПРАВА ЧАСТИНА -->
+<div class="cart">
+  <h2>🛒 Кошик</h2>
+  <div id="cart-box"></div>
+</div>
 
 <script src="script.js"></script>
 
