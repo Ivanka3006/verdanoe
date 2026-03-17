@@ -7,66 +7,67 @@
 
 <body>
 
-<h2>Додати рослину</h2>
+<h2>Додати товар</h2>
 
-<input id="name" placeholder="Назва">
-<input id="desc" placeholder="Опис">
-<input id="price" placeholder="Ціна">
-<input id="category" placeholder="Категорія">
+<input id="name" placeholder="Назва"><br><br>
+<input id="price" placeholder="Ціна"><br><br>
+<input id="category" placeholder="Категорія"><br><br>
+<input id="image" placeholder="URL картинки"><br><br>
 
-<button onclick="addPlant()">Додати</button>
+<button onclick="addProduct()">Додати</button>
 
-<script>
-function addPlant() {
-  const name = document.getElementById("name").value;
-  const desc = document.getElementById("desc").value;
-  const price = document.getElementById("price").value;
-  const category = document.getElementById("category").value;
-
-  let plants = JSON.parse(localStorage.getItem("plants")) || [];
-
-  plants.push({
-    name,
-    desc,
-    price,
-    category
-  });
-
-  localStorage.setItem("plants", JSON.stringify(plants));
-
-  alert("Додано!");
-
-  document.getElementById("name").value = "";
-  document.getElementById("desc").value = "";
-  document.getElementById("price").value = "";
-  document.getElementById("category").value = "";
-}
-</script>
-
-</body>
-</html>
+<h2>Список товарів</h2>
+<div id="list"></div>
 
 <script>
 function addProduct() {
-  let name = document.getElementById("name").value;
-  let price = document.getElementById("price").value;
-  let category = document.getElementById("category").value;
-  let image = document.getElementById("image").value;
+  const name = document.getElementById("name").value;
+  const price = document.getElementById("price").value;
+  const category = document.getElementById("category").value;
+  const image = document.getElementById("image").value;
 
   let plants = JSON.parse(localStorage.getItem("plants")) || [];
 
-  let newProduct = {
+  const newProduct = {
     id: Date.now(),
-    name,
+    name: name,
     price: Number(price),
-    category,
-    image
+    category: category,
+    image: image
   };
 
   plants.push(newProduct);
 
   localStorage.setItem("plants", JSON.stringify(plants));
 
-  alert("Товар додано!");
+  renderList();
 }
+
+function renderList() {
+  let plants = JSON.parse(localStorage.getItem("plants")) || [];
+
+  const list = document.getElementById("list");
+
+  list.innerHTML = plants.map((p, i) => `
+    <div style="border:1px solid #ccc; margin:5px; padding:5px;">
+      ${p.name} - ${p.price} грн
+      <button onclick="deleteItem(${i})">❌</button>
+    </div>
+  `).join("");
+}
+
+function deleteItem(index) {
+  let plants = JSON.parse(localStorage.getItem("plants")) || [];
+
+  plants.splice(index, 1);
+
+  localStorage.setItem("plants", JSON.stringify(plants));
+
+  renderList();
+}
+
+renderList();
 </script>
+
+</body>
+</html>
