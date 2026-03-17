@@ -1,0 +1,316 @@
+verdanoe
+│
+├ server.jsconst express = require("express")
+const sqlite3 = require("sqlite3").verbose()
+const multer = require("multer")
+
+const app = express()
+
+const db = new sqlite3.Database("database.db")
+
+app.use(express.json())
+app.use(express.static("public"))
+
+const upload = multer({dest:"uploads/"})
+
+db.run(`
+CREATE TABLE IF NOT EXISTS plants(
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+name TEXT,
+price INTEGER,
+category TEXT,
+image TEXT
+)
+`)
+
+app.get("/plants",(req,res)=>{
+
+db.all("SELECT * FROM plants",(err,rows)=>{
+
+res.json(rows)
+
+})
+
+})
+
+app.post("/plants", upload.single("image"), (req,res)=>{
+
+let {name,price,category} = req.body
+
+db.run(
+"INSERT INTO plants(name,price,category,image) VALUES(?,?,?,?)",
+[name,price,category,req.file?.filename]
+)
+
+res.send("ok")
+
+})
+
+app.delete("/plants/:id",(req,res)=>{
+
+db.run("DELETE FROM plants WHERE id=?",[req.params.id])
+
+res.send("deleted")
+
+})
+
+app.listen(3000,()=>{
+
+console.log("Verdanoe server running")
+
+})
+├ database.db
+│
+├ public
+│   ├ index.html<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>Verdanoe — розсадник рослин</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+
+<h1>🌿 Verdanoe</h1>
+
+<nav>
+<a href="#">Каталог</a>
+<a href="#">Про нас</a>
+<a href="admin.html">Адмін</a>
+</nav>
+
+</header>
+
+
+<h2>Каталог рослин</h2>
+
+<input id="search" placeholder="Пошук рослин">
+
+<div id="catalog"></div>
+
+
+<h2>Кошик</h2>
+
+<ul id="cart"></ul>
+
+<p>Разом: <span id="total">0</span> грн</p>
+
+<button onclick="pay()">Оплатити</button>
+
+<script src="app.js"></script>
+
+</body>
+</html>
+│   ├ admin.html<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Verdanoe Admin</title>
+</head>
+
+<body>
+
+<h1>Адмін панель Verdanoe</h1>
+
+<form id="addPlant">
+
+<input name="name" placeholder="Назва рослини">
+<input name="price" placeholder="Ціна">
+<input name="category" placeholder="Категорія">
+
+<input type="file" name="image">
+
+<button>Додати рослину</button>
+
+</form>
+
+<ul id="list"></ul>
+
+<script>
+
+async function load(){
+
+let res = await fetch("/plants");
+let plants = await res.json();
+
+let list = document.getElementById("list");
+
+list.innerHTML="";
+
+plants.forEach(p=>{
+
+let li=document.createElement("li");
+
+li.innerHTML = `
+${p.name} — ${p.price} грн
+<button onclick="remove(${p.id})">видалити</button>
+`;
+
+list.appendChild(li);
+
+});
+
+}
+
+async function remove(id){
+
+await fetch("/plants/"+id,{method:"DELETE"});
+
+load();
+
+}
+
+document.getElementById("addPlant").onsubmit = async e=>{
+
+e.preventDefault();
+
+let form = new FormData(e.target);
+
+await fetch("/plants",{
+
+method:"POST",
+body:form
+
+});
+
+alert("Рослину додано");
+
+load();
+
+}
+
+load();
+
+</script>
+
+</body>
+</html>
+│   ├ style.cssbody{
+font-family:Arial;
+background:#f5f7f5;
+margin:0;
+padding:20px;
+}
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+h1{
+color:#2e7d32;
+}
+
+#catalog{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:20px;
+margin-top:20px;
+}
+
+.card{
+background:white;
+padding:15px;
+border-radius:8px;
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+
+.card img{
+width:100%;
+height:150px;
+object-fit:cover;
+}
+│   └ app.jslet cart = [];
+
+async function loadPlants(){
+
+let res = await fetch("/plants");
+let plants = await res.json();
+
+render(plants);
+
+}
+
+function render(plants){
+
+let catalog = document.getElementById("catalog");
+
+catalog.innerHTML="";
+
+plants.forEach(p=>{
+
+let card = document.createElement("div");
+
+card.className="card";
+
+card.innerHTML = `
+<img src="/uploads/${p.image || ""}">
+<h3>${p.name}</h3>
+<p>${p.category}</p>
+<p>${p.price} грн</p>
+
+<button onclick="addToCart('${p.name}',${p.price})">
+Купити
+</button>
+`;
+
+catalog.appendChild(card);
+
+});
+
+}
+
+function addToCart(name,price){
+
+cart.push({name,price});
+
+updateCart();
+
+}
+
+function updateCart(){
+
+let list = document.getElementById("cart");
+
+let total = 0;
+
+list.innerHTML="";
+
+cart.forEach(i=>{
+
+total += i.price;
+
+let li = document.createElement("li");
+
+li.textContent = i.name + " — " + i.price + " грн";
+
+list.appendChild(li);
+
+});
+
+document.getElementById("total").textContent = total;
+
+}
+
+document.getElementById("search").addEventListener("input",async e=>{
+
+let text = e.target.value.toLowerCase();
+
+let res = await fetch("/plants");
+let plants = await res.json();
+
+let filtered = plants.filter(p=>
+p.name.toLowerCase().includes(text)
+);
+
+render(filtered);
+
+});
+
+loadPlants();
+│
+└ uploads
