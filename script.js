@@ -1,18 +1,29 @@
 const catalog = document.getElementById("catalog");
 const cartBox = document.getElementById("cart-box");
 
-/* ТОВАРИ */
-let plants = JSON.parse(localStorage.getItem("plants")) || [
-  {
-    id: 1,
-    name: "Туя Смарагд",
-    price: 250,
-    category: "хвойні",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Thuja_occidentalis_Smaragd.jpg/320px-Thuja_occidentalis_Smaragd.jpg"
-  }
-];
+/* ТОВАРИ З LOCALSTORAGE */
+let plants = JSON.parse(localStorage.getItem("plants"));
+
+if (!plants || plants.length === 0) {
+  plants = [
+    {
+      id: 1,
+      name: "Туя Смарагд",
+      price: 250,
+      category: "хвойні",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Thuja_occidentalis_Smaragd.jpg/320px-Thuja_occidentalis_Smaragd.jpg"
+    }
+  ];
+  localStorage.setItem("plants", JSON.stringify(plants));
+}
+
+/* КОШИК */
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
 /* КАТАЛОГ */
 function renderCatalog() {
+  if (!catalog) return;
+
   catalog.innerHTML = plants.map(p => `
     <div class="card">
       <img src="${p.image}">
@@ -24,21 +35,7 @@ function renderCatalog() {
   `).join("");
 }
 
-/* ДОДАТИ В КОШИК */
-function addToCart(id) {
-  let item = plants.find(p => p.id === id);
-  let existing = cart.find(p => p.id === id);
-
-  if (existing) {
-    existing.qty++;
-  } else {
-    cart.push({ ...item, qty: 1 });
-  }
-
-  saveCart();
-}
-
-/* ВІДОБРАЖЕННЯ КОШИКА */
+/* КОШИК */
 function renderCart() {
   if (!cartBox) return;
 
@@ -53,10 +50,9 @@ function renderCart() {
     total += item.price * item.qty;
 
     return `
-      <div style="border-bottom:1px solid #ccc; padding:5px;">
-        <b>${item.name}</b><br>
-        ${item.price} грн × ${item.qty}<br>
-
+      <div>
+        ${item.name} (${item.qty})<br>
+        ${item.price} грн
         <button onclick="changeQty(${index}, 1)">+</button>
         <button onclick="changeQty(${index}, -1)">-</button>
         <button onclick="removeItem(${index})">❌</button>
@@ -67,7 +63,21 @@ function renderCart() {
   cartBox.innerHTML += <h3>Сума: ${total} грн</h3>;
 }
 
-/* ЗМІНА КІЛЬКОСТІ */
+/* ДОДАТИ */
+function addToCart(id) {
+  let item = plants.find(p => p.id === id);
+  let existing = cart.find(p => p.id === id);
+
+  if (existing) {
+    existing.qty++;
+  } else {
+    cart.push({ ...item, qty: 1 });
+  }
+
+  saveCart();
+}
+
+/* КІЛЬКІСТЬ */
 function changeQty(index, delta) {
   cart[index].qty += delta;
 
@@ -78,18 +88,18 @@ function changeQty(index, delta) {
   saveCart();
 }
 
-/* ВИДАЛЕННЯ */
+/* ВИДАЛИТИ */
 function removeItem(index) {
   cart.splice(index, 1);
   saveCart();
 }
 
-/* ЗБЕРЕЖЕННЯ */
+/* ЗБЕРЕГТИ */
 function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
   renderCart();
 }
 
-/* ЗАПУСК */
+/* СТАРТ */
 renderCatalog();
 renderCart();
