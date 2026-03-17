@@ -1,1 +1,30 @@
 
+<h2>Товар</h2>
+
+<div id="product"></div>
+
+<script>
+const plants = JSON.parse(localStorage.getItem("plants")) || [];
+const index = localStorage.getItem("currentProduct");
+
+const product = plants[index];
+
+const div = document.getElementById("product");
+
+if (product) {
+  div.innerHTML = `
+    <h2>${product.name}</h2>
+    <p>${product.desc}</p>
+    <p>Категорія: ${product.category}</p>
+    <b>${product.price} грн</b><br><br>
+    <button onclick="buy()">Купити</button>
+  `;
+}
+
+function buy() {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart.push(product);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  alert("Додано в кошик!");
+}
+</script>
