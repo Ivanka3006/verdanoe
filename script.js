@@ -28,13 +28,24 @@ function filter(cat) {
     render(filtered);
   }
 }
-
 function addToCart(index) {
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  cart.push(plants[index]);
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  let item = plants[index];
+
+  let existing = cart.find(p => p.name === item.name);
+
+  if (existing) {
+    existing.qty = (existing.qty || 1) + 1;
+  } else {
+    item.qty = 1;
+    cart.push(item);
+  }
+
   localStorage.setItem("cart", JSON.stringify(cart));
   alert("Додано в кошик");
 }
+
 
 function openProduct(index) {
   localStorage.setItem("currentProduct", index);
