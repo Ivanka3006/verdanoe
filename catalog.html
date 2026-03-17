@@ -1,10 +1,62 @@
-<button onclick="filter('всі')">Всі</button>
-<button onclick="filter('туї')">Туї</button>
-<button onclick="filter('квіти')">Квіти</button>
-<button onclick="filter('дерева')">Дерева</button>
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Verdanoe</title>
 
-<h2>Каталог рослин</h2>
+  <style>
+    body {
+      font-family: Arial;
+      margin: 0;
+      padding-top: 60px;
+    }
 
-<div id="catalog"></div>
+    /* 🛒 верхня панель */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: green;
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .catalog {
+      padding: 20px;
+    }
+
+    .card {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px;
+    }
+
+    .cart-box {
+      position: fixed;
+      right: 10px;
+      top: 70px;
+      background: white;
+      border: 1px solid black;
+      padding: 10px;
+      width: 200px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="top-bar">
+  <div>🌿 Verdanoe</div>
+  <div>🛒 Кошик: <span id="cart-count">0</span></div>
+</div>
+
+<div class="catalog" id="catalog"></div>
+
+<div class="cart-box" id="cart-box"></div>
 
 <script src="script.js"></script>
+
+</body>
+</html>
